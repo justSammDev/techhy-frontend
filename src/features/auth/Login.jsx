@@ -1,26 +1,32 @@
 import { useRef, useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
+
+import { useDispatch } from "react-redux";
 import { setCredentials } from "./authSlice";
 import { useLoginMutation } from "./authApiSlice";
+
 import usePersist from "../../hooks/usePersist";
 
 const Login = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-
   const userRef = useRef();
   const errRef = useRef();
-
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errMsg, setErrMsg] = useState("");
   const [persist, setPersist] = usePersist();
 
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [login, { isLoading }] = useLoginMutation();
 
-  useEffect(() => userRef.current.focus(), []);
-  useEffect(() => setErrMsg(""), [username, password]);
+  useEffect(() => {
+    userRef.current.focus();
+  }, []);
+
+  useEffect(() => {
+    setErrMsg("");
+  }, [username, password]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -53,7 +59,7 @@ const Login = () => {
   if (isLoading) return <p>Loading...</p>;
 
   const content = (
-    <section className=" public">
+    <section className="public">
       <header>
         <h1>Employee Login</h1>
       </header>
@@ -61,6 +67,7 @@ const Login = () => {
         <p ref={errRef} className={errClass} aria-live="assertive">
           {errMsg}
         </p>
+
         <form className="form" onSubmit={handleSubmit}>
           <label htmlFor="username">Username:</label>
           <input
@@ -73,6 +80,7 @@ const Login = () => {
             autoComplete="off"
             required
           />
+
           <label htmlFor="password">Password:</label>
           <input
             className="form__input"
@@ -83,11 +91,12 @@ const Login = () => {
             required
           />
           <button className="form__submit-button">Sign In</button>
+
           <label htmlFor="persist" className="form__persist">
             <input
-              id="persist"
               type="checkbox"
               className="form__checkbox"
+              id="persist"
               onChange={handleToggle}
               checked={persist}
             />
@@ -103,5 +112,4 @@ const Login = () => {
 
   return content;
 };
-
 export default Login;

@@ -16,7 +16,7 @@ const Prefetch = () => {
       users.unsubscribe();
     };
   }, []);
+
   return <Outlet />;
 };
-
 export default Prefetch;
